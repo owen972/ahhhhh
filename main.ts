@@ -637,7 +637,7 @@ info.setScore(10000)
 forever(function () {
     controller.moveSprite(mySprite)
     if (info.score() < 0) {
-        mySprite2.follow(mySprite)
+        mySprite2.follow(mySprite, 50)
     }
 })
 game.onUpdateInterval(500, function () {
