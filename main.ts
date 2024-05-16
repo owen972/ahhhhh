@@ -1,3 +1,24 @@
+function Strange_flute () {
+    Fruit = sprites.create(img`
+        . . . . . . . . . . . 6 6 6 6 6 
+        . . . . . . . . . 6 6 7 7 7 7 8 
+        . . . . . . 8 8 8 7 7 8 8 6 8 8 
+        . . e e e e c 6 6 8 8 . 8 7 8 . 
+        . e 2 5 4 2 e c 8 . . . 6 7 8 . 
+        e 2 4 2 2 2 2 2 c . . . 6 7 8 . 
+        e 2 2 2 2 2 2 2 c . . . 8 6 8 . 
+        e 2 e e 2 2 2 2 e e e e c 6 8 . 
+        c 2 e e 2 2 2 2 e 2 5 4 2 c 8 . 
+        . c 2 e e e 2 e 2 4 2 2 2 2 c . 
+        . . c 2 2 2 e e 2 2 2 2 2 2 2 e 
+        . . . e c c e c 2 2 2 2 2 2 2 e 
+        . . . . . . . c 2 e e 2 2 e 2 c 
+        . . . . . . . c e e e e e e 2 c 
+        . . . . . . . . c e 2 2 2 2 c . 
+        . . . . . . . . . c c c c c . . 
+        `, SpriteKind.Projectile)
+    tiles.placeOnRandomTile(Fruit, assets.tile`transparency16`)
+}
 function Random () {
     Gambling_machine = sprites.create(img`
         4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
@@ -92,11 +113,18 @@ controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . f f f . . . . 
         `],
     500,
-    false
+    true
     )
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    info.changeScoreBy(100)
+    pause(10)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    effects.confetti.endScreenEffect()
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    info.changeScoreBy(-1000)
+    info.changeScoreBy(-900)
     scene.setBackgroundImage(img`
         ................................................................................................................................................................
         ................................................................................................................................................................
@@ -219,7 +247,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         ................................................................................................................22222...........................................
         ................................................................................................................................................................
         `)
-    pause(9000)
+    pause(5000)
     scene.setBackgroundImage(img`
         eeeee2222222222222222222222222222222222ee2222ee2222ee2222222eeeee2222222222222222222222222222222222ee22222eeee222ee2eeeee2222222222222222222222222222222222ee222
         222eeeee22222222222222222222222222222eee2222eeee2222ee222222222eeeee22222222222222222222222222222eee2222eeeee222ee22222eeeee22222222222222222222222222222eee2222
@@ -344,6 +372,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         `)
 })
 let Gambling_machine: Sprite = null
+let Fruit: Sprite = null
 let mySprite: Sprite = null
 scene.setBackgroundImage(img`
     ................................................................................................................................................................
@@ -634,6 +663,9 @@ for (let value of tiles.getTilesByType(assets.tile`transparency16`)) {
     tiles.placeOnTile(mySprite, tiles.getTileLocation(0, 0))
 }
 info.setScore(10000)
+game.onUpdateInterval(5000, function () {
+    Strange_flute()
+})
 forever(function () {
     controller.moveSprite(mySprite)
     if (info.score() < 0) {
